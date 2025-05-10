@@ -1,13 +1,14 @@
 // server.js
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import connectDB from './config/db.js';
-import authRoutes from './routes/authRoutes.js';
-import habitRoutes from './routes/habitRoutes.js';
-import { notFound, errorHandler } from './middleware/errorMiddleware.js';
-import path from 'path';
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const connectDB = require('./config/db.js');
+const authRoutes = require('./routes/authRoutes.js');
+const habitRoutes = require('./routes/habitRoutes.js');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware.js');
+const path = require('path');
 
+// Load environment variables
 dotenv.config();
 connectDB();
 

@@ -1,36 +1,47 @@
+// components/habits/HabitForm.jsx
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createHabit } from '../../features/habits/habitSlice';
+import InputField from '../common/InputField';
+import Button from '../ui/Button';
 
-const HabitForm = () => {
-  const [text, setText] = useState('');
+const HabitForm = ({ onSubmit, initialData = {} }) => {
+  const [form, setForm] = useState({
+    title: initialData.title || '',
+    description: initialData.description || '',
+  });
 
-  const dispatch = useDispatch();
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const onSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    dispatch(createHabit({ text }));
-    setText('');
+    onSubmit(form);
+    setForm({ title: '', description: '' }); // Reset form after submission
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="text" className="block text-sm font-medium text-gray-700">Habit</label>
-        <input
-          type="text"
-          name="text"
-          id="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-        />
-      </div>
-      <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
-        Add Habit
-      </button>
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 bg-white shadow rounded-xl">
+      <h2 className="text-xl font-semibold mb-4">{initialData._id ? 'Edit Habit' : 'Add New Habit'}</h2>
+      <InputField
+        label="Title"
+        type="text"
+        name="title"
+        value={form.title}
+        onChange={handleChange}
+        required
+      />
+      <InputField
+        label="Description"
+        type="text"
+        name="description"
+        value={form.description}
+        onChange={handleChange}
+      />
+      <Button type="submit" className="w-full">
+        {initialData._id ? 'Update Habit' : 'Add Habit'}
+      </Button>
     </form>
   );
 };
+
 export default HabitForm;

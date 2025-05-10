@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import InputField from '../ui/InputField';
+import InputField from '../common/InputField';
 
+import Button from '../ui/Button'; // Import the custom Button component
 const RegisterForm = ({ onRegister }) => {
   const [formData, setFormData] = useState({
     username: '',
@@ -16,7 +17,7 @@ const RegisterForm = ({ onRegister }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    onRegister(formData);
+    if (onRegister) onRegister(formData);
   };
 
   return (
@@ -50,9 +51,9 @@ const RegisterForm = ({ onRegister }) => {
           onChange={onChange}
           required
         />
-        <button type="submit" className="btn btn-primary">
+        <Button type="submit" variant="primary" className="w-full"> {/* Use the Button component */}
           Register
-        </button>
+        </Button>
       </form>
       <p className="mt-3 text-center">
         Already have an account? <Link to="/login">Login</Link>

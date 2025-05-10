@@ -1,17 +1,17 @@
 // controllers/habitController.js
-import Habit from '../models/Habit.js';
-import formatDate from '../utils/formatDate.js';
+const Habit = require('../models/Habit.js');
+const formatDate = require('../utils/formatDate.js');
 
 // @desc    Get all habits for logged-in user
 // @route   GET /api/habits
-export const getHabits = async (req, res) => {
+const getHabits = async (req, res) => {
   const habits = await Habit.find({ user: req.user._id });
   res.json(habits);
 };
 
 // @desc    Create new habit
 // @route   POST /api/habits
-export const createHabit = async (req, res) => {
+const createHabit = async (req, res) => {
   const { title, description } = req.body;
 
   if (!title) {
@@ -30,7 +30,7 @@ export const createHabit = async (req, res) => {
 
 // @desc    Update a habit
 // @route   PUT /api/habits/:id
-export const updateHabit = async (req, res) => {
+const updateHabit = async (req, res) => {
   const habit = await Habit.findById(req.params.id);
   const { title, description, targetDays } = req.body;
 
@@ -49,7 +49,7 @@ export const updateHabit = async (req, res) => {
 
 // @desc    Delete a habit
 // @route   DELETE /api/habits/:id
-export const deleteHabit = async (req, res) => {
+const deleteHabit = async (req, res) => {
   const habit = await Habit.findById(req.params.id);
 
   if (!habit || habit.user.toString() !== req.user._id.toString()) {
@@ -62,7 +62,7 @@ export const deleteHabit = async (req, res) => {
 
 // @desc    Mark habit completed for today
 // @route   PUT /api/habits/check/:id
-export const markHabitComplete = async (req, res) => {
+const markHabitComplete = async (req, res) => {
   const habit = await Habit.findById(req.params.id);
   const today = formatDate(new Date());
 
@@ -102,3 +102,5 @@ export const markHabitComplete = async (req, res) => {
 
   res.json(habit);
 };
+
+module.exports = { getHabits, createHabit, updateHabit, deleteHabit, markHabitComplete };

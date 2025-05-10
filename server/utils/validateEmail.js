@@ -9,4 +9,4 @@ const validateEmail = (email) => {
   return emailRegex.test(email);
 };
 
-export default validateEmail;
+module.exports = validateEmail;

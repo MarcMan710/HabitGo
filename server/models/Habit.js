@@ -1,5 +1,5 @@
 // models/Habit.js
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const habitSchema = new mongoose.Schema({
   user:          { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -11,4 +11,4 @@ const habitSchema = new mongoose.Schema({
   longestStreak: { type: Number, default: 0 },
 }, { timestamps: true });
 
-export default mongoose.model('Habit', habitSchema);
+module.exports = mongoose.model('Habit', habitSchema);

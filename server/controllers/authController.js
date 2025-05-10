@@ -1,12 +1,12 @@
 // controllers/authController.js
-import bcrypt from 'bcryptjs';
-import User from '../models/User.js';
-import generateToken from '../utils/generateToken.js';
-import validateEmail from '../utils/validateEmail.js';
+const bcrypt = require('bcryptjs');
+const User = require('../models/User.js');
+const generateToken = require('../utils/generateToken.js');
+const validateEmail = require('../utils/validateEmail.js');
 
 // @desc    Register new user
 // @route   POST /api/auth/register
-export const registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
@@ -38,7 +38,7 @@ export const registerUser = async (req, res) => {
 
 // @desc    Authenticate user
 // @route   POST /api/auth/login
-export const loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email: email.toLowerCase() });
 
@@ -47,14 +47,11 @@ export const loginUser = async (req, res) => {
   }
 
   if (user && (await bcrypt.compare(password, user.password))) {
-      const token = generateToken(user._id);
-      res.json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      token,
-    });
+    const token = generateToken(user._id);
+    res.status(200).json({ _id: user._id, name: user.name, email: user.email.toLowerCase(), token });
   } else {
     res.status(401).json({ message: 'Invalid email or password' });
   }
 };
+
+module.exports = { registerUser, loginUser };
