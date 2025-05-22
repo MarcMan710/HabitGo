@@ -4,103 +4,100 @@ const formatDate = require('../utils/formatDate.js');
 
 // @desc    Get all habits for logged-in user
 // @route   GET /api/habits
-const getHabits = async (req, res) => {
-  const habits = await Habit.find({ user: req.user._id });
-  res.json(habits);
+const getHabits = async (req, res, next) => {
+  try {
+    const habits = await Habit.find({ user: req.user._id });
+    res.json(habits);
+  } catch (error) {
+    console.error('Error in getHabits:', error);
+    next(error);
+  }
 };
 
 // @desc    Create new habit
 // @route   POST /api/habits
-const createHabit = async (req, res) => {
-  const { title, description } = req.body;
+const createHabit = async (req, res, next) => {
+  try {
+    const { title, description } = req.body;
 
-  if (!title) {
-    return res.status(400).json({ message: 'Title is required' });
+    if (!title) {
+      res.status(400).json({ message: 'Title is required' });
+      return; // Ensure no further execution
+    }
+
+    const habit = new Habit({
+      user: req.user._id,
+      title,
+      description,
+    });
+
+    const created = await habit.save();
+    res.status(201).json(created);
+  } catch (error) {
+    console.error('Error in createHabit:', error);
+    next(error);
   }
-
-  const habit = new Habit({
-    user: req.user._id,
-    title,
-    description,
-  });
-
-  const created = await habit.save();
-  res.status(201).json(created);
 };
 
 // @desc    Update a habit
 // @route   PUT /api/habits/:id
-const updateHabit = async (req, res) => {
-  const habit = await Habit.findById(req.params.id);
-  const { title, description, targetDays } = req.body;
+const updateHabit = async (req, res, next) => {
+  try {
+    const { habit } = req; // Habit is attached by authorizeHabitOwner middleware
+    const { title, description, targetDays } = req.body;
 
-  if (!habit || habit.user.toString() !== req.user._id.toString()) {
-    return res.status(404).json({ message: 'Habit not found or unauthorized' });
+    habit.targetDays = targetDays || habit.targetDays;
+    habit.title = req.body.title || habit.title;
+    habit.description = req.body.description || habit.description;
+
+    const updated = await habit.save();
+    res.json(updated);
+  } catch (error) {
+    console.error('Error in updateHabit:', error);
+    next(error);
   }
-
-  habit.targetDays = targetDays || habit.targetDays;
-
-
-  habit.title = req.body.title || habit.title;
-  habit.description = req.body.description || habit.description;
-  const updated = await habit.save();
-  res.json(updated);
 };
 
 // @desc    Delete a habit
 // @route   DELETE /api/habits/:id
-const deleteHabit = async (req, res) => {
-  const habit = await Habit.findById(req.params.id);
+const deleteHabit = async (req, res, next) => {
+  try {
+    const { habit } = req; // Habit is attached by authorizeHabitOwner middleware
 
-  if (!habit || habit.user.toString() !== req.user._id.toString()) {
-    return res.status(404).json({ message: 'Habit not found or unauthorized' });
+    await habit.remove();
+    res.json({ message: 'Habit deleted' });
+  } catch (error) {
+    console.error('Error in deleteHabit:', error);
+    next(error);
   }
-
-  await habit.remove();
-  res.json({ message: 'Habit deleted' });
 };
 
 // @desc    Mark habit completed for today
 // @route   PUT /api/habits/check/:id
-const markHabitComplete = async (req, res) => {
-  const habit = await Habit.findById(req.params.id);
-  const today = formatDate(new Date());
+const markHabitComplete = async (req, res, next) => {
+  try {
+    const { habit } = req; // Habit is attached by authorizeHabitOwner middleware
+    const today = formatDate(new Date());
 
-  if (!habit || habit.user.toString() !== req.user._id.toString()) {
-    return res.status(404).json({ message: 'Habit not found or unauthorized' });
-  }
+    const alreadyMarked = habit.daysCompleted.some(
+      (date) => formatDate(date) === today
+    );
 
-  const alreadyMarked = habit.daysCompleted.some(
-    (date) => formatDate(date) === today
-  );
+    if (!alreadyMarked) {
+      habit.daysCompleted.push(new Date()); // Add today's date object to the array
 
-  if (!alreadyMarked) {
-    habit.daysCompleted.push(new Date());
+      habit.updateStreak(today); // Call the model method, passing the formatted 'today' string
 
-    // Calculate current streak
-    let currentStreak = 0;
-    let longestStreak = habit.longestStreak;
-    const sortedDays = habit.daysCompleted.sort((a, b) => a - b);
-    for (let i = sortedDays.length - 1; i >= 0; i--) {
-      const diff = new Date(today).getTime() - sortedDays[i].getTime();
-      const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
-      if (diffDays <= currentStreak + 1) {
-        currentStreak++;
-      } else {
-        break;
-      }
+      const updatedHabit = await habit.save();
+      res.json(updatedHabit); // Changed to res.json from return res.json
+      return; // Ensure no further execution if response is sent
     }
 
-    habit.currentStreak = currentStreak;
-    if (currentStreak > longestStreak) {
-      habit.longestStreak = currentStreak;
-    }
-
-    const updatedHabit = await habit.save();
-    return res.json(updatedHabit);
+    res.json(habit);
+  } catch (error) {
+    console.error('Error in markHabitComplete:', error);
+    next(error);
   }
-
-  res.json(habit);
 };
 
 module.exports = { getHabits, createHabit, updateHabit, deleteHabit, markHabitComplete };
