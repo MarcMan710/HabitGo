@@ -7,6 +7,7 @@ const HabitForm = ({ onSubmit, initialData = {} }) => {
   const [form, setForm] = useState({
     title: initialData.title || '',
     description: initialData.description || '',
+    category: initialData.category || 'other',
   });
 
   const handleChange = (e) => {
@@ -16,7 +17,7 @@ const HabitForm = ({ onSubmit, initialData = {} }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(form);
-    setForm({ title: '', description: '' }); // Reset form after submission
+    setForm({ title: '', description: '', category: 'other' }); // Reset form after submission
   };
 
   return (
@@ -37,6 +38,26 @@ const HabitForm = ({ onSubmit, initialData = {} }) => {
         value={form.description}
         onChange={handleChange}
       />
+      <div className="mb-4">
+        <label htmlFor="category" className="block text-gray-700 text-sm font-bold mb-2">
+          Category <span className="text-red-500">*</span>
+        </label>
+        <select
+          id="category"
+          name="category"
+          value={form.category}
+          onChange={handleChange}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        >
+          <option value="health">Health</option>
+          <option value="work">Work</option>
+          <option value="learning">Learning</option>
+          <option value="personal">Personal</option>
+          <option value="fitness">Fitness</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
       <Button type="submit" className="w-full">
         {initialData._id ? 'Update Habit' : 'Add Habit'}
       </Button>
