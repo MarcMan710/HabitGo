@@ -4,7 +4,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { useHabits } from '../contexts/HabitContext';
 import HabitList from '../components/habits/HabitList';
 import HabitForm from '../components/habits/HabitForm';
+import Calendar from '../components/calendar/Calendar';
 import Spinner from '../components/ui/Spinner';
+import { scheduleAllNotifications, requestNotificationPermission } from '../services/notificationService';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -21,6 +23,19 @@ const Dashboard = () => {
     };
     fetchHabits();
   }, [user, loadHabits]);
+
+  // Initialize notifications when habits are loaded
+  useEffect(() => {
+    if (!loading && habits.length > 0) {
+      const initializeNotifications = async () => {
+        const permitted = await requestNotificationPermission();
+        if (permitted) {
+          scheduleAllNotifications(habits);
+        }
+      };
+      initializeNotifications();
+    }
+  }, [loading, habits]);
 
   const handleAddHabit = async (habitData) => {
     const res = await fetch('/api/habits', {
@@ -101,15 +116,23 @@ const Dashboard = () => {
         <Spinner />
       ) : (
         <>
-          <HabitForm
-            onSubmit={editingHabit ? handleUpdateHabit : handleAddHabit}
-            initialData={editingHabit || {}}
-          />
-          <HabitList
-            habits={habits}
-            onCheck={handleCheckHabit}
-            onDelete={handleDeleteHabit}
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div>
+              <HabitForm
+                onSubmit={editingHabit ? handleUpdateHabit : handleAddHabit}
+                initialData={editingHabit || {}}
+              />
+              <HabitList
+                habits={habits}
+                onCheck={handleCheckHabit}
+                onDelete={handleDeleteHabit}
+              />
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Calendar View</h2>
+              <Calendar habits={habits} />
+            </div>
+          </div>
         </>
       )}
     </main>
