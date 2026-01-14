@@ -8,6 +8,7 @@ import Spinner from './components/ui/Spinner';
 import { useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ThemeToggle } from './components/ThemeToggle';
+import FadeIn from './components/ui/FadeIn';
 
 function App() {
   const { initialising } = useAuth();
@@ -18,16 +19,20 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-background text-text">
-        <div className="fixed top-4 right-4 z-50">
+      <div className="min-h-screen bg-background text-text flex flex-col">
+        <div className="absolute top-0 right-0 p-4 z-50">
           <ThemeToggle />
         </div>
         <Router>
-          <Routes>
-            <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
+          <main className="flex-grow container mx-auto p-4">
+            <FadeIn>
+              <Routes>
+                <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+              </Routes>
+            </FadeIn>
+          </main>
         </Router>
       </div>
     </ThemeProvider>

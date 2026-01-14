@@ -110,14 +110,15 @@ const Dashboard = () => {
   };
 
   return (
-    <main className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6">Your Habits</h1>
+    <div className="py-8 px-4">
+      <h1 className="text-4xl font-extrabold text-primary mb-8">Your Habits</h1>
       {loading ? (
         <Spinner />
       ) : (
         <>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <div>
+            <div className="bg-background p-6 rounded-lg shadow-md">
+              <h2 className="text-2xl font-semibold text-text mb-4">Manage Habits</h2>
               <HabitForm
                 onSubmit={editingHabit ? handleUpdateHabit : handleAddHabit}
                 initialData={editingHabit || {}}
@@ -128,14 +129,14 @@ const Dashboard = () => {
                 onDelete={handleDeleteHabit}
               />
             </div>
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Calendar View</h2>
+            <div className="bg-background p-6 rounded-lg shadow-md">
+              <h2 className="text-2xl font-semibold text-text mb-4">Calendar View</h2>
               <Calendar habits={habits} />
             </div>
           </div>
         </>
       )}
-    </main>
+    </div>
   );
 };
 

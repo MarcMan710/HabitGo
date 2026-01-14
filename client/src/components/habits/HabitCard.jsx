@@ -10,12 +10,12 @@ const HabitCard = ({ habit, onCheck, onDelete }) => {
 
   const getCategoryColor = (category) => {
     const colors = {
-      health: 'bg-green-100 text-green-800',
-      work: 'bg-blue-100 text-blue-800',
-      learning: 'bg-purple-100 text-purple-800',
-      personal: 'bg-yellow-100 text-yellow-800',
-      fitness: 'bg-red-100 text-red-800',
-      other: 'bg-gray-100 text-gray-800'
+      health: 'bg-green-50 text-green-700 ring-green-600/20',
+      work: 'bg-blue-50 text-blue-700 ring-blue-600/20',
+      learning: 'bg-purple-50 text-purple-700 ring-purple-600/20',
+      personal: 'bg-yellow-50 text-yellow-700 ring-yellow-600/20',
+      fitness: 'bg-red-50 text-red-700 ring-red-600/20',
+      other: 'bg-gray-50 text-gray-700 ring-gray-600/20'
     };
     return colors[category] || colors.other;
   };
@@ -42,35 +42,35 @@ const HabitCard = ({ habit, onCheck, onDelete }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-4">
-      <div className="flex justify-between items-start mb-2">
-        <h3 className="text-lg font-bold">{habit.title}</h3>
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(habit.category)}`}>
+    <div className="bg-background border border-border rounded-lg shadow-sm p-5 hover:shadow-md transition-shadow duration-200">
+      <div className="flex justify-between items-start mb-3">
+        <h3 className="text-xl font-bold text-primary">{habit.title}</h3>
+        <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ${getCategoryColor(habit.category)}`}>
           {habit.category.charAt(0).toUpperCase() + habit.category.slice(1)}
         </span>
       </div>
-      <p className="text-sm text-gray-600">{habit.description}</p>
-      <div className="mt-2">
-        <span className="text-xs text-gray-500">Schedule: </span>
-        <span className="text-xs font-medium text-indigo-600">{getScheduleLabel(habit.schedule)}</span>
+      <p className="text-sm text-secondary mb-4">{habit.description}</p>
+      <div className="mt-2 text-sm">
+        <span className="text-secondary">Schedule: </span>
+        <span className="font-medium text-primary">{getScheduleLabel(habit.schedule)}</span>
       </div>
-      <p className="text-xs text-gray-500 mt-1">Completion Rate: <span className="font-semibold">{calculateCompletionRate(habit)}%</span></p>
+      <p className="text-sm text-secondary mt-1">Completion Rate: <span className="font-semibold text-text">{calculateCompletionRate(habit)}%</span></p>
       {getStreakBadge(habit.daysCompleted) && (
-        <p className="text-xs text-yellow-600 font-bold mt-1">{getStreakBadge(habit.daysCompleted)}</p>
+        <p className="text-sm text-accent font-bold mt-1">{getStreakBadge(habit.daysCompleted)}</p>
       )}
-      <div className="flex gap-2 mt-3">
+      <div className="flex gap-3 mt-4">
         <Button
           onClick={() => onCheck(habit._id)}
-          className={`${
-            isChecked ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'
-          } text-white py-2 px-3 rounded-md text-sm font-medium`}
+          variant={isChecked ? 'secondary' : 'primary'}
+          size="sm"
           disabled={isChecked}
         >
           {isChecked ? 'Completed' : 'Mark Done'}
         </Button>
         <Button 
           onClick={() => onDelete(habit._id)} 
-          className="bg-red-500 hover:bg-red-600 text-white py-2 px-3 rounded-md text-sm font-medium"
+          variant="danger"
+          size="sm"
         >
           Delete
         </Button>

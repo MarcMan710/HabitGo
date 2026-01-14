@@ -22,7 +22,7 @@ const HabitForm = ({ onSubmit, initialData = {} }) => {
   });
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, checked } = e.target;
     
     if (name.startsWith('customDay')) {
       const dayNumber = parseInt(name.replace('customDay', ''));
@@ -134,7 +134,7 @@ const HabitForm = ({ onSubmit, initialData = {} }) => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 bg-white shadow rounded-xl">
-      <h2 className="text-xl font-semibold mb-4">{initialData._id ? 'Edit Habit' : 'Add New Habit'}</h2>
+      <h2 className="card-title-x1 font-semibold mb-4">{initialData._id ? 'Edit Habit' : 'Add New Habit'}</h2>
       
       <InputField
         label="Title"

@@ -83,7 +83,7 @@ const deleteHabit = async (req, res) => {
     return res.status(404).json({ message: 'Habit not found or unauthorized' });
   }
 
-  await habit.remove();
+  await Habit.deleteOne({ _id: habit._id });
   res.json({ message: 'Habit deleted' });
 };
 

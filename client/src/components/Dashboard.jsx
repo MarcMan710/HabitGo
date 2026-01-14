@@ -1,7 +1,26 @@
+import React, { useState } from 'react';
+import { useHabits } from '../contexts/HabitContext';
 import HabitAnalytics from './analytics/HabitAnalytics';
+import { getCurrentStreak as getStreak } from '../services/analyticsService';
+import Calendar from './calendar/Calendar';
 
 const Dashboard = () => {
   const [selectedHabit, setSelectedHabit] = useState(null);
+  const { habits, updateHabit, loadHabits } = useHabits();
+
+  const handleCompleteHabit = async (id) => {
+    // Placeholder for habit completion logic
+    console.log('Complete habit:', id);
+    // In a real app, you would make an API call here and then update the habit context
+    // For example: await habitService.completeHabit(id); updateHabit(updatedHabit);
+    // For now, let's simulate an update
+    const updatedHabit = habits.find(habit => habit._id === id);
+    if (updatedHabit) {
+      updatedHabit.daysCompleted.push(new Date().toISOString());
+      updateHabit({ ...updatedHabit }); // Use updateHabit from context
+      loadHabits(); // Reload habits to reflect changes
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -29,7 +48,7 @@ const Dashboard = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <span className="text-sm text-gray-600">
-                        Current Streak: {getCurrentStreak(habit)}
+                        Current Streak: {getStreak(habit)}
                       </span>
                       <button
                         onClick={(e) => {

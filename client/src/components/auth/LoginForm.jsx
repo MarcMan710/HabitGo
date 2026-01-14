@@ -49,7 +49,8 @@ const LoginForm = () => {
 
   return (
     // Removed max-w-md mx-auto here as the parent page now handles centering and max-width
-    <form onSubmit={handleSubmit} className="p-4 bg-white shadow rounded-xl space-y-4">
+    <form onSubmit={handleSubmit} className="p-8 bg-background border border-border rounded-lg shadow-lg space-y-6 max-w-md mx-auto mt-10">
+      <h2 className="text-3xl font-bold text-center text-form-title mb-6">Login to HabitGo</h2>
       <InputField
         label="Email Address"
         id="email"
@@ -70,9 +71,9 @@ const LoginForm = () => {
       <Button type="submit" variant="primary" className="w-full" disabled={isLoading}> {/* Use the Button component */}
         {isLoading ? 'Logging in...' : 'Login'}
       </Button>
-      <p className="mt-4 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-secondary">
         Don't have an account?{' '}
-        <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+        <Link to="/register" className="font-medium text-primary hover:text-primary-dark transition-colors duration-200">
           Register here
         </Link>
       </p>

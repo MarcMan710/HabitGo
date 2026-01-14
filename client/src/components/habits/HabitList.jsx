@@ -13,16 +13,14 @@ const HabitList = ({ habits, onCheck, onDelete }) => {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="flex flex-wrap gap-2 mb-6">
         {categories.map(category => (
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-              selectedCategory === category
-                ? 'bg-indigo-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${selectedCategory === category
+                ? 'bg-primary text-white shadow-sm'
+                : 'bg-secondary-light text-text hover:bg-secondary-light/70'}`}
           >
             {category.charAt(0).toUpperCase() + category.slice(1)}
           </button>
@@ -39,7 +37,7 @@ const HabitList = ({ habits, onCheck, onDelete }) => {
         ))}
       </div>
       {filteredHabits.length === 0 && (
-        <p className="text-center text-gray-500 mt-4">
+        <p className="text-center text-secondary mt-6">
           No habits found in this category.
         </p>
       )}

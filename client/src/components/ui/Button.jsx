@@ -23,10 +23,10 @@ const Button = ({
 
   // Variant styles
   const variantStyles = {
-    primary: 'bg-indigo-600 hover:bg-indigo-700 text-white focus:ring-indigo-500 border border-transparent',
-    secondary: 'bg-white hover:bg-gray-50 text-gray-700 focus:ring-indigo-500 border border-gray-300',
+    primary: 'bg-primary hover:bg-primary-dark text-white focus:ring-primary border border-transparent',
+    secondary: 'bg-background hover:bg-secondary-light text-secondary focus:ring-secondary border border-border',
     danger: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 border border-transparent',
-    ghost: 'bg-transparent hover:bg-gray-100 text-gray-700 focus:ring-indigo-500 border border-transparent shadow-none',
+    ghost: 'bg-transparent hover:bg-secondary-light text-text focus:ring-secondary border border-transparent shadow-none',
     // Add more variants as needed (e.g., outline)
   };
 

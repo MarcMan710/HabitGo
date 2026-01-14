@@ -21,10 +21,10 @@ const RegisterForm = ({ onRegister }) => {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center">Register</h2>
-      <form onSubmit={onSubmit}>
-        <InputField
+    <>
+    <form onSubmit={onSubmit} className="p-8 bg-background border border-border rounded-lg shadow-lg space-y-6 max-w-md mx-auto mt-10">
+      <h2 className="text-3xl font-bold text-center text-form-title mb-6">Register for HabitGo</h2>
+      <InputField
           label="Username"
           type="text"
           id="username"
@@ -54,11 +54,14 @@ const RegisterForm = ({ onRegister }) => {
         <Button type="submit" variant="primary" className="w-full"> {/* Use the Button component */}
           Register
         </Button>
-      </form>
-      <p className="mt-3 text-center">
-        Already have an account? <Link to="/login">Login</Link>
+        <p className="mt-6 text-center text-sm text-secondary">
+        Already have an account?{' '}
+        <Link to="/login" className="font-medium text-primary hover:text-primary-dark transition-colors duration-200">
+          Login
+        </Link>
       </p>
-    </div>
+    </form>
+    </>
   );
 };
 
